@@ -201,3 +201,54 @@ button {
     height: 32px;
   }
 }
+
+
+.room {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #aaa;
+  margin: 3px;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.room.occupied {
+  background-color: red;
+  color: white;
+}
+
+.room.booked {
+  background-color: green;
+  color: white;
+}
+
+.room.preview {
+  background-color: orange;
+  color: white;
+}
+
+.room.loading {
+  animation: pulse 1s infinite;
+  background-color: #eee;
+  color: transparent;
+}
+
+
+.room.booked-loading {
+  background-color: #ccc;
+  color: white;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}

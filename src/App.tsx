@@ -2,22 +2,31 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
 
+const BASE_URL = 'https://hotel-reservation-jjtt.onrender.com';
+
 const App = () => {
   const [booked, setBooked] = useState<number[]>([]);
   const [roomRequest, setRoomRequest] = useState<number>(0);
-  const [roomRequestInput, setRoomRequestInput] = useState<string>(''); // Raw input
+  const [roomRequestInput, setRoomRequestInput] = useState<string>('');
   const [error, setError] = useState<string>('');
-
   const [availableRoomNumbers, setAvailableRoomNumbers] = useState<number[]>([]);
   const [previewRooms, setPreviewRooms] = useState<number[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchRooms = async () => {
-    const res = await axios.get('http://localhost:4001/api/rooms');
-    setAvailableRoomNumbers(res.data.map((r: any) => r.roomNumber));
+  const fetchRooms = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
+    try {
+      const res = await axios.get(`${BASE_URL}/api/rooms`);
+      setAvailableRoomNumbers(res.data.map((r: any) => r.roomNumber));
+    } catch (err) {
+      console.error('Failed to fetch rooms', err);
+    } finally {
+      if (showLoading) setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchRooms();
+    fetchRooms(true);
   }, []);
 
   useEffect(() => {
@@ -79,54 +88,66 @@ const App = () => {
       setError('You can only book between 1 and 5 rooms.');
       return;
     }
-
+  
     try {
-      const res = await axios.post('http://localhost:4001/api/book', { count: roomRequest });
+      const res = await axios.post(`${BASE_URL}/api/book`, { count: roomRequest });
+      
       setBooked(res.data.rooms || []);
-      setRoomRequest(0);
-      setRoomRequestInput('');
       setError('');
-      fetchRooms();
+      
+      // Delay clearing until rooms update is fetched
+      setRoomRequestInput('');
+      setRoomRequest(0);
+      fetchRooms(false); // no pulse loading
+      setPreviewRooms([]); // clear after new data
     } catch (err) {
       setError('Booking failed. Please try again.');
     }
   };
 
   const handleReset = async () => {
-    await axios.post('http://localhost:4001/api/reset');
+    await axios.post(`${BASE_URL}/api/reset`);
     setBooked([]);
     setRoomRequest(0);
     setRoomRequestInput('');
     setError('');
-    fetchRooms();
+    fetchRooms(false);
   };
 
   const handleRandom = async () => {
-    await axios.post('http://localhost:4001/api/random');
+    await axios.post(`${BASE_URL}/api/random`);
     setBooked([]);
     setRoomRequest(0);
     setRoomRequestInput('');
     setError('');
-    fetchRooms();
+    fetchRooms(false);
   };
 
   const renderFloor = (floor: number) => {
     const roomCount = floor === 10 ? 7 : 10;
     const floorRooms = Array.from({ length: roomCount }, (_, i) => floor * 100 + i + 1);
+
     return (
       <div className="floor" key={floor}>
         <div className="floor-label">Floor {floor}</div>
-        {floorRooms.map((room) => (
-          <div
-            key={room}
-            className={`room 
-              ${!availableRoomNumbers.includes(room) ? 'occupied' : ''} 
-              ${booked.includes(room) ? 'booked' : ''} 
-              ${previewRooms.includes(room) ? 'preview' : ''}`}
-          >
-            {room}
-          </div>
-        ))}
+        {floorRooms.map((room) => {
+          const isOccupied = !availableRoomNumbers.includes(room);
+          const isBooked = booked.includes(room);
+          const isPreview = previewRooms.includes(room);
+
+          return (
+            <div
+              key={room}
+              className={`room 
+                ${loading ? 'loading' : ''} 
+                ${isOccupied ? 'occupied' : ''} 
+                ${isBooked ? 'booked' : ''} 
+                ${isPreview ? 'preview' : ''}`}
+            >
+              {room}
+            </div>
+          );
+        })}
       </div>
     );
   };
