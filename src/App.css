@@ -1,38 +1,203 @@
 .App {
   text-align: center;
+  padding: 30px 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  margin-bottom: 30px;
+  font-size: 26px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+.room.preview {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: 2px dashed #fff;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.controls {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.controls input {
+  padding: 10px;
+  font-size: 15px;
+  width: 80px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.controls button {
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: white;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.controls button:hover {
+  background-color: #f0f0f0;
+}
+
+.hotel {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.floor {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.floor-label {
+  min-width: 70px;
+  height: 36px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-right: 10px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.room {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  margin: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: 0.2s;
+  background-color: white;
+  flex-shrink: 0;
+}
+
+.room:hover {
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.room.occupied {
+  background-color: #ff4d4d;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.room.booked {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+
+
+.App {
+  text-align: center;
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.controls input {
+  width: 60px;
+  padding: 5px;
+  font-size: 16px;
+  text-align: center;
+}
+
+button {
+  padding: 5px 15px;
+  font-size: 16px;
+}
+
+.hotel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.floor {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.floor-label {
+  width: 70px;
+  font-weight: bold;
+}
+
+.room {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.occupied {
+  background-color: #ccc;
+}
+
+.booked {
+  background-color: #4caf50;
+  color: #fff;
+}
+/* Mobile adjustments */
+@media screen and (max-width: 600px) {
+  h1 {
+    font-size: 20px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .controls input,
+  .controls button {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .room {
+    width: 32px;
+    height: 32px;
+    font-size: 10px;
+  }
+
+  .floor-label {
+    font-size: 12px;
+    min-width: 60px;
+    height: 32px;
   }
 }
